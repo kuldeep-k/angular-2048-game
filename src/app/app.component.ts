@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'app works!';
   state = [];
+  prevState = [];
   selectedIndex = [];
   colors = {};
 
@@ -31,7 +32,6 @@ export class AppComponent implements OnInit {
 
 
   public ngOnInit() {
-    console.log('Hello Word');
     const cBlock = this.getFreeBlock(0);
     this.state[cBlock[0]][cBlock[1]] = 2;
     
@@ -51,6 +51,7 @@ export class AppComponent implements OnInit {
 
   moveToBelow() {
     let nstate = [];
+    this.updatePrevState();
     // let nstate = this.state.slice(0);
     for (let i = 0; i < 4; i++) {
       nstate[i] = [];
@@ -81,6 +82,7 @@ export class AppComponent implements OnInit {
 
   moveToTop() {
     let nstate = [];
+    this.updatePrevState();
     // let nstate = this.state.slice(0);
     for (let i = 0; i < 4; i++) {
       nstate[i] = [];
@@ -111,6 +113,7 @@ export class AppComponent implements OnInit {
 
   moveToRight() {
     let nstate = [];
+    this.updatePrevState();
     // let nstate = this.state.slice(0);
     for (let i = 0; i < 4; i++) {
       nstate[i] = [];
@@ -141,6 +144,7 @@ export class AppComponent implements OnInit {
 
   moveToLeft() {
     let nstate = [];
+    this.updatePrevState();
     // let nstate = this.state.slice(0);
     for (let i = 0; i < 4; i++) {
       nstate[i] = [];
@@ -169,6 +173,18 @@ export class AppComponent implements OnInit {
     this.addNewEntry(0);
   }
 
+  updatePrevState() {
+    let nstate = [];
+    for (let i = 0; i < 4; i++) {
+      nstate[i] = [];
+      for (let j = 0; j < 4; j++) {
+        nstate[i][j] = this.state[i][j];
+      }
+    }
+
+    this.prevState.push(nstate);
+  }
+
   addNewEntry(iRow) {
     const cBlock = this.getFreeBlock(iRow);
     this.state[cBlock[0]][cBlock[1]] = 2;
@@ -177,7 +193,6 @@ export class AppComponent implements OnInit {
   move(row, col) {
     this.selectedIndex = [row, col];
     for (let i = 1; i < 4; i++) {
-      console.log(i + 1);
       if (this.state[i][col] === '' && (i + 1) < 4 && this.state[i+1][col] !== '') {
         if(this.state[i+1][col] === 2) {
           this.state[i+1][col] += 2;
@@ -187,5 +202,9 @@ export class AppComponent implements OnInit {
         break;
       }
     }
+  }
+
+  undo() {
+    this.state = this.prevState.pop();
   }
 }
