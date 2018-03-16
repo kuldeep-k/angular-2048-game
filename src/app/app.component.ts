@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   prevState = [];
   selectedIndex = [];
   colors = {};
+  totalScore = 0;
 
   public constructor() {
     this.state = [
@@ -34,7 +35,6 @@ export class AppComponent implements OnInit {
   public ngOnInit() {
     const cBlock = this.getFreeBlock(0);
     this.state[cBlock[0]][cBlock[1]] = 2;
-    
   }
 
   getFreeBlock(iRow) {
@@ -69,6 +69,7 @@ export class AppComponent implements OnInit {
               nstate[i][j] = '';
             } else if(nstate[i+1][j] === nstate[i][j]) {
               nstate[i+1][j] += nstate[i][j];
+              this.calculateScore(nstate[i+1][j]);
               nstate[i][j] = '';
             }
           }
@@ -100,6 +101,7 @@ export class AppComponent implements OnInit {
               nstate[i][j] = '';
             } else if(nstate[i-1][j] === nstate[i][j]) {
               nstate[i-1][j] += nstate[i][j];
+              this.calculateScore(nstate[i-1][j]);
               nstate[i][j] = '';
             }
           }
@@ -131,6 +133,7 @@ export class AppComponent implements OnInit {
               nstate[i][j] = '';
             } else if(nstate[i][j+1] === nstate[i][j]) {
               nstate[i][j+1] += nstate[i][j];
+              this.calculateScore(nstate[i][j+1]);
               nstate[i][j] = '';
             }
           }
@@ -162,6 +165,7 @@ export class AppComponent implements OnInit {
               nstate[i][j] = '';
             } else if(nstate[i][j-1] === nstate[i][j]) {
               nstate[i][j-1] += nstate[i][j];
+              this.calculateScore(nstate[i][j-1]);
               nstate[i][j] = '';
             }
           }
@@ -207,4 +211,9 @@ export class AppComponent implements OnInit {
   undo() {
     this.state = this.prevState.pop();
   }
+
+  calculateScore(number) {
+    this.totalScore += number;
+  }
+  
 }
